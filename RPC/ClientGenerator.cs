@@ -101,6 +101,7 @@ namespace HttpRPC.RPC
 
             var tArgument = m.ReturnType.GenericTypeArguments[0];
 
+
             var proxyMethod = typeof(Proxy).GetMethod("Execute");
             // Adds a method call to the Execute method in ServiceProxy on the _proxy field with the service uri, method name and method return type name as inputs
             // and then returns from the method body

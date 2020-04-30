@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -43,7 +44,8 @@ namespace HttpRPC.RPC
 
         private async Task<string> SendRequest(string uri, Dictionary<string, object> input)
         {
-            var payload = new StringContent(JsonSerializer.Serialize(input, new JsonSerializerOptions { IgnoreNullValues = true }));
+            var stringInput = JsonSerializer.Serialize(input, new JsonSerializerOptions { IgnoreNullValues = true });
+            var payload = new StringContent(stringInput, Encoding.UTF8, "application/json");
 
             var response = await Http.PostAsync(uri, payload);
             if (!response.IsSuccessStatusCode)

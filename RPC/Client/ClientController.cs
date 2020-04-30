@@ -78,3 +78,4 @@ namespace HttpRPC.RPC.Client
             return arguments.ToArray();
         }
     }
+}
