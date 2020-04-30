@@ -19,6 +19,7 @@ namespace HttpRPC.RPC.Client
         }
 
         [HttpPost]
+        [Consumes("application/json")]
         public async Task<IActionResult> Execute([FromBody]Dictionary<string, object> input)
         {
             try

@@ -31,6 +31,8 @@ namespace HttpRPC.RPC
                     else
                         return null;
                 }
+                if (type == typeof(string))
+                    return response;
 
                 var result = JsonSerializer.Deserialize(response, type, new JsonSerializerOptions { IgnoreNullValues = true });
 

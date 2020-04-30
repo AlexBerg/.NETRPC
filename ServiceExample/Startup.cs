@@ -23,7 +23,7 @@ namespace ServiceExample
         {
             services
                 .AddMvc()
-                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
+                .AddNewtonsoftJson()
                 .AddMvcOptions(options => options.EnableEndpointRouting = false)
                 .ConfigureApplicationPartManager(apm => apm.FeatureProviders.Add(new ClientControllerFeatureProvider<IService>()));
         }
