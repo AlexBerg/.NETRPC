@@ -10,7 +10,7 @@ namespace HttpRPC.RPC
     public class ClientGenerator
     {
         // This method is generates a class during runtime that implements a interface given in Type argument
-        public static T GenerateClass<T>(IServiceFinder serviceFinder, HttpClient http)
+        public static T GenerateClass<T>(IServiceFinder serviceFinder, HttpClient http, Type[] inheritedTypes = null)
         {
             try
             {
@@ -21,7 +21,12 @@ namespace HttpRPC.RPC
 
                 var typeBuilder = CreateTypeBuilder(); // Creates a class type
 
-                var methods = t.GetMethods();
+                var methods = t.GetMethods().ToList();
+                if(inheritedTypes != null)
+                    foreach(Type type in inheritedTypes)
+                    {
+                        methods.AddRange(type.GetMethods());
+                    }
 
                 // Add a field to the class
                 var field = CreateFiled(typeBuilder);
@@ -99,7 +104,11 @@ namespace HttpRPC.RPC
                 i += 1;
             }
 
-            var tArgument = m.ReturnType.GenericTypeArguments[0];
+            Type tArgument = null;
+            if (m.ReturnType.IsGenericType)
+                tArgument = m.ReturnType.GenericTypeArguments[0];
+            else
+                tArgument = m.ReturnType;
 
 
             var proxyMethod = typeof(Proxy).GetMethod("Execute");
