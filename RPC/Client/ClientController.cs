@@ -26,14 +26,21 @@ namespace HttpRPC.RPC.Client
             {
                 // Get the correct method implementation in the service
                 var type = Service.GetType();
-                var methods = type.GetMethods();
                 var methodName = (string)input["methodName"];
                 input.Remove("methodName");
-                var method = methods.FirstOrDefault(m => m.Name == methodName && input.All(i => m.GetParameters().Any(a => a.Name == i.Key)));
+                var methods = type.GetMethods();
+                MethodInfo method = null;
+                object[] arguments = new object[] { };
+                if (input != null && input.Count() != 0)
+                {
+                    method = methods.FirstOrDefault(m => m.Name == methodName && input.All(i => m.GetParameters().Any(a => a.Name == i.Key)));
 
-                var parameters = method.GetParameters();
-                // Get and convert all the inputs to match the input parameters to the method
-                var arguments = GenerateArguments(parameters, input);
+                    var parameters = method.GetParameters();
+                    // Get and convert all the inputs to match the input parameters to the method
+                    arguments = GenerateArguments(parameters, input);
+                }
+                else
+                    method = methods.FirstOrDefault(m => m.Name == methodName && m.GetParameters().Count() == 0);
 
                 // Call the method and convert result to Task
                 var task = (Task)method.Invoke(Service, arguments);
@@ -66,13 +73,23 @@ namespace HttpRPC.RPC.Client
                 else
                 {
                     var value = inputs[p.Name];
-                    var paramType = p.ParameterType;
-                    if (value.GetType() != paramType)
+                    if (value == null)
                     {
-                        var stringValue = JsonSerializer.Serialize(value);
-                        value = JsonSerializer.Deserialize(stringValue, paramType);
+                        if (p.HasDefaultValue)
+                            arguments.Add(p.DefaultValue);
+                        else
+                            arguments.Add(value);
                     }
-                    arguments.Add(value);
+                    else
+                    {
+                        var paramType = p.ParameterType;
+                        if (value.GetType() != paramType)
+                        {
+                            var stringValue = JsonSerializer.Serialize(value);
+                            value = JsonSerializer.Deserialize(stringValue, paramType);
+                        }
+                        arguments.Add(value);
+                    }
                 }
             }
 
