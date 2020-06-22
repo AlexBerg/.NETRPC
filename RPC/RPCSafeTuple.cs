@@ -4,30 +4,87 @@ namespace HttpRPC.RPC
 {
     public static class RPCSafeTuple
     {
-        public static RPCSafeTuple<T1, T2> ConvertValueTuple<T1, T2>(ValueTuple<T1, T2> tuple)
+        public static RPCSafeTuple<T1, T2> ConvertFromValueTuple<T1, T2>(ValueTuple<T1, T2> tuple)
         {
             return new RPCSafeTuple<T1, T2>(tuple);
         }
-        public static RPCSafeTuple<T1, T2, T3> ConvertValueTuple<T1, T2, T3>(ValueTuple<T1, T2, T3> tuple)
+        public static RPCSafeTuple<T1, T2, T3> ConvertFromValueTuple<T1, T2, T3>(ValueTuple<T1, T2, T3> tuple)
         {
             return new RPCSafeTuple<T1, T2, T3>(tuple);
         }
-        public static RPCSafeTuple<T1, T2, T3, T4> ConvertValueTuple<T1, T2, T3, T4>(ValueTuple<T1, T2, T3, T4> tuple)
+        public static RPCSafeTuple<T1, T2, T3, T4> ConvertFromValueTuple<T1, T2, T3, T4>(ValueTuple<T1, T2, T3, T4> tuple)
         {
             return new RPCSafeTuple<T1, T2, T3, T4>(tuple);
         }
-        public static RPCSafeTuple<T1, T2, T3, T4, T5> ConvertValueTuple<T1, T2, T3, T4, T5>(ValueTuple<T1, T2, T3, T4, T5> tuple)
+        public static RPCSafeTuple<T1, T2, T3, T4, T5> ConvertFromValueTuple<T1, T2, T3, T4, T5>(ValueTuple<T1, T2, T3, T4, T5> tuple)
         {
             return new RPCSafeTuple<T1, T2, T3, T4, T5>(tuple);
         }
-        public static RPCSafeTuple<T1, T2, T3, T4, T5, T6> ConvertValueTuple<T1, T2, T3, T4, T5, T6>(ValueTuple<T1, T2, T3, T4, T5, T6> tuple)
+        public static RPCSafeTuple<T1, T2, T3, T4, T5, T6> ConvertFromValueTuple<T1, T2, T3, T4, T5, T6>(ValueTuple<T1, T2, T3, T4, T5, T6> tuple)
         {
             return new RPCSafeTuple<T1, T2, T3, T4, T5, T6>(tuple);
         }
-        public static RPCSafeTuple<T1, T2, T3, T4, T5, T6, T7> ConvertValueTuple<T1, T2, T3, T4, T5, T6, T7>(ValueTuple<T1, T2, T3, T4, T5, T6, T7> tuple)
+        public static RPCSafeTuple<T1, T2, T3, T4, T5, T6, T7> ConvertFromValueTuple<T1, T2, T3, T4, T5, T6, T7>(ValueTuple<T1, T2, T3, T4, T5, T6, T7> tuple)
         {
             return new RPCSafeTuple<T1, T2, T3, T4, T5, T6, T7>(tuple);
         }
+
+        public static ValueTuple<T1, T2> ConvertToValueTuple<T1, T2>(RPCSafeTuple<T1, T2> tuple)
+        {
+            var (i1, i2) = tuple;
+            return (i1, i2);
+        }
+        public static ValueTuple<T1, T2, T3> ConvertToValueTuple<T1, T2, T3>(RPCSafeTuple<T1, T2, T3> tuple)
+        {
+            var (i1, i2, i3) = tuple;
+            return (i1, i2, i3);
+        }
+        public static ValueTuple<T1, T2, T3, T4> ConvertToValueTuple<T1, T2, T3, T4>(RPCSafeTuple<T1, T2, T3, T4> tuple)
+        {
+            var (i1, i2, i3, i4) = tuple;
+            return (i1, i2, i3, i4);
+        }
+        public static ValueTuple<T1, T2, T3, T4, T5> ConvertToValueTuple<T1, T2, T3, T4, T5>(RPCSafeTuple<T1, T2, T3, T4, T5> tuple)
+        {
+            var (i1, i2, i3, i4, i5) = tuple;
+            return (i1, i2, i3, i4, i5);
+        }
+        public static ValueTuple<T1, T2, T3, T4, T5, T6> ConvertToValueTuple<T1, T2, T3, T4, T5, T6>(RPCSafeTuple<T1, T2, T3, T4, T5, T6> tuple)
+        {
+            var (i1, i2, i3, i4, i5, i6) = tuple;
+            return (i1, i2, i3, i4, i5, i6);
+        }
+        public static ValueTuple<T1, T2, T3, T4, T5, T6, T7> ConvertToValueTuple<T1, T2, T3, T4, T5, T6, T7>(RPCSafeTuple<T1, T2, T3, T4, T5, T6, T7> tuple)
+        {
+            var (i1, i2, i3, i4, i5, i6, i7) = tuple;
+            return (i1, i2, i3, i4, i5, i6, i7);
+        }
+
+
+        public static bool IsValueTuple(this object value) =>
+            value switch
+            {
+                ValueTuple<object, object> _                                         => true,
+                ValueTuple<object, object, object> _                                 => true,
+                ValueTuple<object, object, object, object> _                         => true,
+                ValueTuple<object, object, object, object, object> _                 => true,
+                ValueTuple<object, object, object, object, object, object> _         => true,
+                ValueTuple<object, object, object, object, object, object, object> _ => true,
+                null                                                                 => false,
+                _                                                                    => false
+            };
+
+        public static Type GetCorrectRPCSafeTupleType(this object value) =>
+            value switch
+            {
+                ValueTuple<object, object> _                                         => typeof(RPCSafeTuple<object, object>),
+                ValueTuple<object, object, object> _                                 => typeof(RPCSafeTuple<object, object, object>),
+                ValueTuple<object, object, object, object> _                         => typeof(RPCSafeTuple<object, object, object, object>),
+                ValueTuple<object, object, object, object, object> _                 => typeof(RPCSafeTuple<object, object, object, object, object>),
+                ValueTuple<object, object, object, object, object, object> _         => typeof(RPCSafeTuple<object, object, object, object, object, object>),
+                ValueTuple<object, object, object, object, object, object, object> _ => typeof(RPCSafeTuple<object, object, object, object, object, object, object>),
+                _                                                                    => throw new ArgumentException("Type must be ValueTuple type")
+            };
     }
 
     public class RPCSafeTuple<T1, T2>
