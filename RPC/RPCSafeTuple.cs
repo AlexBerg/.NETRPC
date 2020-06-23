@@ -74,16 +74,41 @@ namespace HttpRPC.RPC
                 _                                                                    => false
             };
 
-        public static Type GetCorrectRPCSafeTupleType(this object value) =>
+        public static bool IsRPCSafeTuple(this object value) =>
             value switch
             {
-                ValueTuple<object, object> _                                         => typeof(RPCSafeTuple<object, object>),
-                ValueTuple<object, object, object> _                                 => typeof(RPCSafeTuple<object, object, object>),
-                ValueTuple<object, object, object, object> _                         => typeof(RPCSafeTuple<object, object, object, object>),
-                ValueTuple<object, object, object, object, object> _                 => typeof(RPCSafeTuple<object, object, object, object, object>),
-                ValueTuple<object, object, object, object, object, object> _         => typeof(RPCSafeTuple<object, object, object, object, object, object>),
-                ValueTuple<object, object, object, object, object, object, object> _ => typeof(RPCSafeTuple<object, object, object, object, object, object, object>),
+                RPCSafeTuple<object, object> _                                         => true,
+                RPCSafeTuple<object, object, object> _                                 => true,
+                RPCSafeTuple<object, object, object, object> _                         => true,
+                RPCSafeTuple<object, object, object, object, object> _                 => true,
+                RPCSafeTuple<object, object, object, object, object, object> _         => true,
+                RPCSafeTuple<object, object, object, object, object, object, object> _ => true,
+                null                                                                   => false,
+                _                                                                      => false
+            };
+
+        public static object GetCorrectRPCSafeTuple(this object value) =>
+            value switch
+            {
+                ValueTuple<object, object> v                                         => ConvertFromValueTuple(v),
+                ValueTuple<object, object, object> v                                 => ConvertFromValueTuple(v),
+                ValueTuple<object, object, object, object> v                         => ConvertFromValueTuple(v),
+                ValueTuple<object, object, object, object, object> v                 => ConvertFromValueTuple(v),
+                ValueTuple<object, object, object, object, object, object> v         => ConvertFromValueTuple(v),
+                ValueTuple<object, object, object, object, object, object, object> v => ConvertFromValueTuple(v),
                 _                                                                    => throw new ArgumentException("Type must be ValueTuple type")
+            };
+
+        public static object GetCorrectValueTuple(this object value) =>
+            value switch
+            {
+                RPCSafeTuple<object, object> v                                         => ConvertToValueTuple(v),
+                RPCSafeTuple<object, object, object> v                                 => ConvertToValueTuple(v),
+                RPCSafeTuple<object, object, object, object> v                         => ConvertToValueTuple(v),
+                RPCSafeTuple<object, object, object, object, object> v                 => ConvertToValueTuple(v),
+                RPCSafeTuple<object, object, object, object, object, object> v         => ConvertToValueTuple(v),
+                RPCSafeTuple<object, object, object, object, object, object, object> v => ConvertToValueTuple(v),
+                _                                                                      => throw new ArgumentException("Type must be ValueTuple type")
             };
     }
 

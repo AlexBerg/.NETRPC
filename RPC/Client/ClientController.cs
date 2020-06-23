@@ -50,6 +50,11 @@ namespace HttpRPC.RPC.Client
                 var resultProperty = task.GetType().GetProperty("Result");
                 var result = resultProperty?.GetValue(task);
 
+                if (result.IsValueTuple())
+                {
+                    result = result.GetCorrectRPCSafeTuple();
+                }
+
                 return Ok(result);
             }
             catch (Exception e)
