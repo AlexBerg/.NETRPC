@@ -12,5 +12,16 @@ namespace ServiceExample
 
             return Task.FromResult($"Hello {name}");
         }
+
+        public bool IsTrue(bool value)
+        {
+            return value == true;
+        }
+
+        public Task<(string v1, int v2)> TestTuple()
+        {
+            (string v1, int v2) = ("value1", 42);
+            return Task.FromResult((v1, v2));
+        }
     }
 }

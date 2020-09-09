@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 
 namespace HttpRPC.RPC
 {
@@ -99,6 +100,18 @@ namespace HttpRPC.RPC
                 _                                                                    => throw new ArgumentException("Type must be ValueTuple type")
             };
 
+        public static object GetCorrectValueSafeTupleFromObject(this object value) =>
+            value switch
+            {
+                ValueTuple<object, object> v => JsonConvert.SerializeObject(value).DeserializeValueTuple(value.GetType().Name),
+                ValueTuple<object, object, object> v => JsonConvert.SerializeObject(value).DeserializeValueTuple(value.GetType().Name),
+                ValueTuple<object, object, object, object> v => JsonConvert.SerializeObject(value).DeserializeValueTuple(value.GetType().Name),
+                ValueTuple<object, object, object, object, object> v => JsonConvert.SerializeObject(value).DeserializeValueTuple(value.GetType().Name),
+                ValueTuple<object, object, object, object, object, object> v => JsonConvert.SerializeObject(value).DeserializeValueTuple(value.GetType().Name),
+                ValueTuple<object, object, object, object, object, object, object> v => JsonConvert.SerializeObject(value).DeserializeValueTuple(value.GetType().Name),
+                _ => throw new ArgumentException("Type must be ValueTuple type")
+            };
+
         public static object GetCorrectValueTuple(this object value) =>
             value switch
             {
@@ -109,6 +122,18 @@ namespace HttpRPC.RPC
                 RPCSafeTuple<object, object, object, object, object, object> v         => ConvertToValueTuple(v),
                 RPCSafeTuple<object, object, object, object, object, object, object> v => ConvertToValueTuple(v),
                 _                                                                      => throw new ArgumentException("Type must be ValueTuple type")
+            };
+
+        public static object DeserializeValueTuple(this string value, string typeName) =>
+            typeName switch
+            {
+                "ValueTuple`2" => JsonConvert.DeserializeObject<RPCSafeTuple<object, object>>(value).GetCorrectValueTuple(),
+                "ValueTuple`3" => JsonConvert.DeserializeObject<RPCSafeTuple<object, object>>(value).GetCorrectValueTuple(),
+                "ValueTuple`4" => JsonConvert.DeserializeObject<RPCSafeTuple<object, object>>(value).GetCorrectValueTuple(),
+                "ValueTuple`5" => JsonConvert.DeserializeObject<RPCSafeTuple<object, object>>(value).GetCorrectValueTuple(),
+                "ValueTuple`6" => JsonConvert.DeserializeObject<RPCSafeTuple<object, object>>(value).GetCorrectValueTuple(),
+                "ValueTuple`7" => JsonConvert.DeserializeObject<RPCSafeTuple<object, object>>(value).GetCorrectValueTuple(),
+                _ => throw new ArgumentException("Type must be ValueTuple type")
             };
     }
 

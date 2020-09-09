@@ -110,8 +110,12 @@ namespace HttpRPC.RPC
             else
                 tArgument = m.ReturnType;
 
+            var isTask = m.ReturnType.Name.Contains("Task");
 
-            var proxyMethod = typeof(Proxy).GetMethod("Execute");
+            var methodName = isTask ? "ExecuteAsync" : "Execute";
+            methodName = GetValueTypeExecutionMethodName(methodName, tArgument);
+
+            var proxyMethod = typeof(Proxy).GetMethod(methodName);
             // Adds a method call to the Execute method in ServiceProxy on the _proxy field with the service uri, method name and method return type name as inputs
             // and then returns from the method body
             il.Emit(OpCodes.Ldarg_0);
@@ -133,6 +137,15 @@ namespace HttpRPC.RPC
             var tb = moduleBuilder.DefineType(typeSignature, TypeAttributes.Public | TypeAttributes.Class | TypeAttributes.AutoClass | TypeAttributes.AnsiClass | TypeAttributes.BeforeFieldInit | TypeAttributes.AutoLayout, null);
 
             return tb;
+        }
+
+        private static string GetValueTypeExecutionMethodName(string baseName, Type type)
+        {
+            var returnName = baseName;
+            if (type.IsValueType)
+                returnName += type.Name;
+
+            return returnName.Replace("`", "");
         }
     }
 }

@@ -8,5 +8,7 @@ namespace HelperLibrary
     public interface IService
     {
         Task<string> Hello(string name);
+        bool IsTrue(bool value);
+        Task<(string v1, int v2)> TestTuple();
     }
 }

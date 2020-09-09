@@ -42,18 +42,20 @@ namespace HttpRPC.RPC.Client
                 else
                     method = methods.FirstOrDefault(m => m.Name == methodName && m.GetParameters().Count() == 0);
 
-                // Call the method and convert result to Task
-                var task = (Task)method.Invoke(Service, arguments);
+                object result = null;
 
-                await task;
-                // Get the result from the method
-                var resultProperty = task.GetType().GetProperty("Result");
-                var result = resultProperty?.GetValue(task);
-
-                if (result.IsValueTuple())
+                if (method.ReturnType.Name.Contains("Task"))
                 {
-                    result = result.GetCorrectRPCSafeTuple();
+                    // Call the method and convert result to Task
+                    var task = (Task)method.Invoke(Service, arguments);
+
+                    await task;
+                    // Get the result from the method
+                    var resultProperty = task.GetType().GetProperty("Result");
+                    result = resultProperty?.GetValue(task);
                 }
+                else
+                    result = method.Invoke(Service, arguments);
 
                 return Ok(result);
             }
@@ -62,6 +64,7 @@ namespace HttpRPC.RPC.Client
                 return StatusCode(500, e.Message);
             }
         }
+
         // Creates a list for the parameters add any needed default parameter and converts all the provided inputs to the correct type
         protected object[] GenerateArguments(ParameterInfo[] parameters, Dictionary<string, object> inputs)
         {
