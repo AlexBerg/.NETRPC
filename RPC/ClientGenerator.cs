@@ -22,8 +22,8 @@ namespace HttpRPC.RPC
                 var typeBuilder = CreateTypeBuilder(); // Creates a class type
 
                 var methods = t.GetMethods().ToList();
-                if(inheritedTypes != null)
-                    foreach(Type type in inheritedTypes)
+                if (inheritedTypes != null)
+                    foreach (Type type in inheritedTypes)
                     {
                         methods.AddRange(type.GetMethods());
                     }
@@ -105,13 +105,16 @@ namespace HttpRPC.RPC
             }
 
             Type tArgument = null;
-            if (m.ReturnType.IsGenericType)
+            var isTask = m.ReturnType.Name.Contains("Task");
+            if (isTask)
                 tArgument = m.ReturnType.GenericTypeArguments[0];
             else
                 tArgument = m.ReturnType;
 
+            var methodName = isTask ? "ExecuteAsync" : "Execute";
+            methodName = GetValueTypeExecutionMethodName(methodName, tArgument);
 
-            var proxyMethod = typeof(Proxy).GetMethod("Execute");
+            var proxyMethod = typeof(Proxy).GetMethod(methodName);
             // Adds a method call to the Execute method in ServiceProxy on the _proxy field with the service uri, method name and method return type name as inputs
             // and then returns from the method body
             il.Emit(OpCodes.Ldarg_0);
@@ -120,7 +123,10 @@ namespace HttpRPC.RPC
             il.Emit(OpCodes.Ldstr, m.Name);
             il.Emit(OpCodes.Ldstr, tArgument.AssemblyQualifiedName);
             il.Emit(OpCodes.Ldloc_0);
-            il.Emit(OpCodes.Callvirt, proxyMethod);
+            if (tArgument.IsValueType && tArgument.IsGenericType)
+                il.Emit(OpCodes.Callvirt, proxyMethod.MakeGenericMethod(tArgument.GenericTypeArguments));
+            else
+                il.Emit(OpCodes.Callvirt, proxyMethod);
             il.Emit(OpCodes.Ret);
         }
 
@@ -133,6 +139,15 @@ namespace HttpRPC.RPC
             var tb = moduleBuilder.DefineType(typeSignature, TypeAttributes.Public | TypeAttributes.Class | TypeAttributes.AutoClass | TypeAttributes.AnsiClass | TypeAttributes.BeforeFieldInit | TypeAttributes.AutoLayout, null);
 
             return tb;
+        }
+
+        private static string GetValueTypeExecutionMethodName(string baseName, Type type)
+        {
+            var returnName = baseName;
+            if (type.IsValueType)
+                returnName += type.Name;
+
+            return returnName.Replace("`", "");
         }
     }
 }

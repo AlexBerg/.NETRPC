@@ -12,10 +12,11 @@ namespace ClientService
         static async Task Main()
         {
             _service = ClientGenerator.GenerateClass<IService>(new ServiceFinder(), new HttpClient());
-            await SendRequest();
+            await TestTuple();
+            TestBool();
         }
 
-        private static async Task SendRequest()
+        private static async Task SendRequestHello()
         {
             Console.WriteLine("What is your name?");
             var name = Console.ReadLine();
@@ -28,6 +29,26 @@ namespace ClientService
                 if (name == "q")
                     break;
             }
+        }
+
+        private static void TestBool()
+        {
+            var isTrue = _service.IsTrue(true);
+            if (isTrue)
+                Console.WriteLine("It was true");
+            else
+                Console.WriteLine("It was false?!");
+
+            Console.WriteLine("Enter any key to quit");
+            Console.ReadLine();
+        }
+
+        private static async Task TestTuple()
+        {
+            var tuple = await _service.TestTuple();
+            Console.WriteLine($"v1: {tuple.v1}, v2: {tuple.v2}");
+            Console.WriteLine("Enter any key to quit");
+            Console.ReadLine();
         }
     }
 }
