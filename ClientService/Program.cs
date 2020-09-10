@@ -13,6 +13,7 @@ namespace ClientService
         {
             _service = ClientGenerator.GenerateClass<IService>(new ServiceFinder(), new HttpClient());
             await TestTuple();
+            TestBool();
         }
 
         private static async Task SendRequestHello()

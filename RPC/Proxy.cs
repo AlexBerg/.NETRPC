@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -153,35 +154,35 @@ namespace HttpRPC.RPC
             var result = Execute(uri, methodName, typeName, inputs);
             return (ValueTuple)result;
         }
-        public ValueTuple<object, object> ExecuteValueTuple2(string uri, string methodName, string typeName, Dictionary<string, object> inputs)
+        public ValueTuple<T1, T2> ExecuteValueTuple2<T1, T2>(string uri, string methodName, string typeName, Dictionary<string, object> inputs)
         {
             var result = Execute(uri, methodName, typeName, inputs);
-            return (ValueTuple<object, object>)result;
+            return (ValueTuple<T1, T2>)result;
         }
-        public ValueTuple<object, object, object> ExecuteValueTuple3(string uri, string methodName, string typeName, Dictionary<string, object> inputs)
+        public ValueTuple<T1, T2, T3> ExecuteValueTuple3<T1, T2, T3>(string uri, string methodName, string typeName, Dictionary<string, object> inputs)
         {
             var result = Execute(uri, methodName, typeName, inputs);
-            return (ValueTuple<object, object, object>)result;
+            return (ValueTuple<T1, T2, T3>)result;
         }
-        public ValueTuple<object, object, object, object> ExecuteValueTuple4(string uri, string methodName, string typeName, Dictionary<string, object> inputs)
+        public ValueTuple<T1, T2, T3, T4> ExecuteValueTuple4<T1, T2, T3, T4>(string uri, string methodName, string typeName, Dictionary<string, object> inputs)
         {
             var result = Execute(uri, methodName, typeName, inputs);
-            return (ValueTuple<object, object, object, object>)result;
+            return (ValueTuple<T1, T2, T3, T4>)result;
         }
-        public ValueTuple<object, object, object, object, object> ExecuteValueTuple5(string uri, string methodName, string typeName, Dictionary<string, object> inputs)
+        public ValueTuple<T1, T2, T3, T4, T5> ExecuteValueTuple5<T1, T2, T3, T4, T5>(string uri, string methodName, string typeName, Dictionary<string, object> inputs)
         {
             var result = Execute(uri, methodName, typeName, inputs);
-            return (ValueTuple<object, object, object, object, object>)result;
+            return (ValueTuple<T1, T2, T3, T4, T5>)result;
         }
-        public ValueTuple<object, object, object, object, object, object> ExecuteValueTuple6(string uri, string methodName, string typeName, Dictionary<string, object> inputs)
+        public ValueTuple<T1, T2, T3, T4, T5, T6> ExecuteValueTuple6<T1, T2, T3, T4, T5, T6>(string uri, string methodName, string typeName, Dictionary<string, object> inputs)
         {
             var result = Execute(uri, methodName, typeName, inputs);
-            return (ValueTuple<object, object, object, object, object, object>)result;
+            return (ValueTuple<T1, T2, T3, T4, T5, T6>)result;
         }
-        public ValueTuple<object, object, object, object, object, object> ExecuteValueTuple7(string uri, string methodName, string typeName, Dictionary<string, object> inputs)
+        public ValueTuple<T1, T2, T3, T4, T5, T6, T7> ExecuteValueTuple7<T1, T2, T3, T4, T5, T6, T7>(string uri, string methodName, string typeName, Dictionary<string, object> inputs)
         {
             var result = Execute(uri, methodName, typeName, inputs);
-            return (ValueTuple<object, object, object, object, object, object>)result;
+            return (ValueTuple<T1, T2, T3, T4, T5, T6, T7>)result;
         }
 
         public async Task<int> ExecuteAsyncInt32(string uri, string methodName, string typeName, Dictionary<string, object> inputs)
@@ -259,36 +260,35 @@ namespace HttpRPC.RPC
             var result = await ExecuteAsync(uri, methodName, typeName, inputs);
             return (ValueTuple)result;
         }
-        public async Task<ValueTuple<object, object>> ExecuteAsyncValueTuple2(string uri, string methodName, string typeName, Dictionary<string, object> inputs)
+        public async Task<ValueTuple<T1, T2>> ExecuteAsyncValueTuple2<T1, T2>(string uri, string methodName, string typeName, Dictionary<string, object> inputs)
         {
             var result = await ExecuteAsync(uri, methodName, typeName, inputs);
-            var serialized = JsonConvert.SerializeObject(result);
-            return JsonConvert.DeserializeObject<ValueTuple<object, object>>(serialized);
+            return (ValueTuple<T1, T2>)result;
         }
-        public async Task<ValueTuple<object, object, object>> ExecuteAsyncValueTuple3(string uri, string methodName, string typeName, Dictionary<string, object> inputs)
+        public async Task<ValueTuple<T1, T2, T3>> ExecuteAsyncValueTuple3<T1, T2, T3>(string uri, string methodName, string typeName, Dictionary<string, object> inputs)
         {
             var result = await ExecuteAsync(uri, methodName, typeName, inputs);
-            return (ValueTuple<object, object, object>)result;
+            return (ValueTuple<T1, T2, T3>)result;
         }
-        public async Task<ValueTuple<object, object, object, object>> ExecuteAsyncValueTuple4(string uri, string methodName, string typeName, Dictionary<string, object> inputs)
+        public async Task<ValueTuple<T1, T2, T3, T4>> ExecuteAsyncValueTuple4<T1, T2, T3, T4>(string uri, string methodName, string typeName, Dictionary<string, object> inputs)
         {
             var result = await ExecuteAsync(uri, methodName, typeName, inputs);
-            return (ValueTuple<object, object, object, object>)result;
+            return (ValueTuple<T1, T2, T3, T4>)result;
         }
-        public async Task<ValueTuple<object, object, object, object, object>> ExecuteAsyncValueTuple5(string uri, string methodName, string typeName, Dictionary<string, object> inputs)
+        public async Task<ValueTuple<T1, T2, T3, T4, T5>> ExecuteAsyncValueTuple5<T1, T2, T3, T4, T5>(string uri, string methodName, string typeName, Dictionary<string, object> inputs)
         {
             var result = await ExecuteAsync(uri, methodName, typeName, inputs);
-            return (ValueTuple<object, object, object, object, object>)result;
+            return (ValueTuple<T1, T2, T3, T4, T5>)result;
         }
-        public async Task<ValueTuple<object, object, object, object, object, object>> ExecuteAsyncValueTuple6A(string uri, string methodName, string typeName, Dictionary<string, object> inputs)
+        public async Task<ValueTuple<T1, T2, T3, T4, T5, T6>> ExecuteAsyncValueTuple6<T1, T2, T3, T4, T5, T6>(string uri, string methodName, string typeName, Dictionary<string, object> inputs)
         {
             var result = await ExecuteAsync(uri, methodName, typeName, inputs);
-            return (ValueTuple<object, object, object, object, object, object>)result;
+            return (ValueTuple<T1, T2, T3, T4, T5, T6>)result;
         }
-        public async Task<ValueTuple<object, object, object, object, object, object>> ExecuteAsyncValueTuple7(string uri, string methodName, string typeName, Dictionary<string, object> inputs)
+        public async Task<ValueTuple<T1, T2, T3, T4, T5, T6, T7>> ExecuteAsyncValueTuple7<T1, T2, T3, T4, T5, T6, T7>(string uri, string methodName, string typeName, Dictionary<string, object> inputs)
         {
             var result = await ExecuteAsync(uri, methodName, typeName, inputs);
-            return (ValueTuple<object, object, object, object, object, object>)result;
+            return (ValueTuple<T1, T2, T3, T4, T5, T6, T7>)result;
         }
         #endregion
     }
