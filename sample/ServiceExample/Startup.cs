@@ -1,4 +1,4 @@
-using HelperLibrary;
+using HelperLibrary.Contracts;
 using HttpRPC.RPC.Client;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;

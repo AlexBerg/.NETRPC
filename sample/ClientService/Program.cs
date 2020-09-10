@@ -1,4 +1,5 @@
 ﻿using HelperLibrary;
+using HelperLibrary.Contracts;
 using HttpRPC.RPC;
 using System;
 using System.Net.Http;
@@ -47,6 +48,7 @@ namespace ClientService
         {
             var tuple = await _service.TestTuple();
             Console.WriteLine($"v1: {tuple.v1}, v2: {tuple.v2}");
+            var tuple2 = _service.TestManyTuple();
             Console.WriteLine("Enter any key to quit");
             Console.ReadLine();
         }

@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -184,6 +183,16 @@ namespace HttpRPC.RPC
             var result = Execute(uri, methodName, typeName, inputs);
             return (ValueTuple<T1, T2, T3, T4, T5, T6, T7>)result;
         }
+        public ValueTuple<T1, T2, T3, T4, T5, T6, T7, TRest> ExecuteValueTuple8<T1, T2, T3, T4, T5, T6, T7, TRest>(string uri, string methodName, string typeName, Dictionary<string, object> inputs) where TRest : struct
+        {
+            var result = Execute(uri, methodName, typeName, inputs);
+            return (ValueTuple<T1, T2, T3, T4, T5, T6, T7, TRest>)result;
+        }
+        public TEnum ExecuteEnum<TEnum>(string uri, string methodName, string typeName, Dictionary<string, object> inputs)
+        {
+            var result = Execute(uri, methodName, typeName, inputs);
+            return (TEnum)result;
+        }
 
         public async Task<int> ExecuteAsyncInt32(string uri, string methodName, string typeName, Dictionary<string, object> inputs)
         {
@@ -289,6 +298,16 @@ namespace HttpRPC.RPC
         {
             var result = await ExecuteAsync(uri, methodName, typeName, inputs);
             return (ValueTuple<T1, T2, T3, T4, T5, T6, T7>)result;
+        }
+        public async Task<ValueTuple<T1, T2, T3, T4, T5, T6, T7, TRest>> ExecuteAsyncValueTuple8<T1, T2, T3, T4, T5, T6, T7, TRest>(string uri, string methodName, string typeName, Dictionary<string, object> inputs) where TRest : struct
+        {
+            var result = await ExecuteAsync(uri, methodName, typeName, inputs);
+            return (ValueTuple<T1, T2, T3, T4, T5, T6, T7, TRest>)result;
+        }
+        public async Task<TEnum> ExecuteAsyncEnum<TEnum>(string uri, string methodName, string typeName, Dictionary<string, object> inputs)
+        {
+            var result = await ExecuteAsync(uri, methodName, typeName, inputs);
+            return (TEnum)result;
         }
         #endregion
     }

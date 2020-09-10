@@ -114,7 +114,7 @@ namespace HttpRPC.RPC
             var methodName = isTask ? "ExecuteAsync" : "Execute";
             methodName = GetValueTypeExecutionMethodName(methodName, tArgument);
 
-            var proxyMethod = typeof(Proxy).GetMethod(methodName);
+            var proxyMethod = GetCorrectMethod(typeof(Proxy).GetMethod(methodName), tArgument);
             // Adds a method call to the Execute method in ServiceProxy on the _proxy field with the service uri, method name and method return type name as inputs
             // and then returns from the method body
             il.Emit(OpCodes.Ldarg_0);
@@ -123,10 +123,7 @@ namespace HttpRPC.RPC
             il.Emit(OpCodes.Ldstr, m.Name);
             il.Emit(OpCodes.Ldstr, tArgument.AssemblyQualifiedName);
             il.Emit(OpCodes.Ldloc_0);
-            if (tArgument.IsValueType && tArgument.IsGenericType)
-                il.Emit(OpCodes.Callvirt, proxyMethod.MakeGenericMethod(tArgument.GenericTypeArguments));
-            else
-                il.Emit(OpCodes.Callvirt, proxyMethod);
+            il.Emit(OpCodes.Callvirt, proxyMethod);
             il.Emit(OpCodes.Ret);
         }
 
@@ -141,11 +138,29 @@ namespace HttpRPC.RPC
             return tb;
         }
 
+        private static MethodInfo GetCorrectMethod(MethodInfo proxyMethod, Type returnArgumentType)
+        {
+            if (returnArgumentType.IsValueType)
+            {
+                if (returnArgumentType.IsGenericType)
+                    return proxyMethod.MakeGenericMethod(returnArgumentType.GenericTypeArguments);
+                if (returnArgumentType.IsEnum)
+                    return proxyMethod.MakeGenericMethod(returnArgumentType);
+            }
+
+            return proxyMethod;
+        }
+
         private static string GetValueTypeExecutionMethodName(string baseName, Type type)
         {
             var returnName = baseName;
             if (type.IsValueType)
-                returnName += type.Name;
+            {
+                if (type.BaseType == typeof(Enum))
+                    returnName += type.BaseType.Name;
+                else
+                    returnName += type.Name;
+            }
 
             return returnName.Replace("`", "");
         }
