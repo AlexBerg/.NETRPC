@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace HttpRPC.RPC.Client
@@ -93,8 +93,8 @@ namespace HttpRPC.RPC.Client
                         var paramType = p.ParameterType;
                         if (value.GetType() != paramType)
                         {
-                            var stringValue = JsonSerializer.Serialize(value);
-                            value = JsonSerializer.Deserialize(stringValue, paramType);
+                            var stringValue = JsonConvert.SerializeObject(value);
+                            value = JsonConvert.DeserializeObject(stringValue, paramType);
                         }
                         arguments.Add(value);
                     }
