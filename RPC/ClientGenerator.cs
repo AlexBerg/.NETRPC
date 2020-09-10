@@ -123,7 +123,7 @@ namespace HttpRPC.RPC
             il.Emit(OpCodes.Ldstr, m.Name);
             il.Emit(OpCodes.Ldstr, tArgument.AssemblyQualifiedName);
             il.Emit(OpCodes.Ldloc_0);
-            if (tArgument.IsGenericType)
+            if (tArgument.IsValueType && tArgument.IsGenericType)
                 il.Emit(OpCodes.Callvirt, proxyMethod.MakeGenericMethod(tArgument.GenericTypeArguments));
             else
                 il.Emit(OpCodes.Callvirt, proxyMethod);
