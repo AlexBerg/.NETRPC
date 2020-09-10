@@ -1,4 +1,5 @@
-﻿using HttpRPC.RPC;
+﻿using HelperLibrary.Contracts;
+using HttpRPC.RPC;
 using System;
 
 namespace HelperLibrary
