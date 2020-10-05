@@ -1,10 +1,16 @@
 ﻿using HelperLibrary.Contracts;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ServiceExample
 {
     public class Service : IService
     {
+        public async Task ExecuteTask()
+        {
+            await Task.Factory.StartNew(() => Thread.Sleep(2000));
+        }
+
         public Task<string> Hello(string name)
         {
             if (string.IsNullOrWhiteSpace(name))

@@ -106,12 +106,13 @@ namespace HttpRPC.RPC
 
             Type tArgument = null;
             var isTask = m.ReturnType.Name.Contains("Task");
-            if (isTask)
+            if (isTask && m.ReturnType.IsGenericType)
                 tArgument = m.ReturnType.GenericTypeArguments[0];
             else
                 tArgument = m.ReturnType;
 
             var methodName = isTask ? "ExecuteAsync" : "Execute";
+
             methodName = GetValueTypeExecutionMethodName(methodName, tArgument);
 
             var proxyMethod = GetCorrectMethod(typeof(Proxy).GetMethod(methodName), tArgument);
@@ -143,8 +144,13 @@ namespace HttpRPC.RPC
             if (returnArgumentType.IsValueType)
             {
                 if (returnArgumentType.IsGenericType)
+                {
+                    if (returnArgumentType.GenericTypeArguments.Count() > 1)
+                        return proxyMethod.MakeGenericMethod(returnArgumentType);
+
                     return proxyMethod.MakeGenericMethod(returnArgumentType.GenericTypeArguments);
-                if (returnArgumentType.IsEnum)
+                }
+                else
                     return proxyMethod.MakeGenericMethod(returnArgumentType);
             }
 
@@ -152,14 +158,11 @@ namespace HttpRPC.RPC
         }
 
         private static string GetValueTypeExecutionMethodName(string baseName, Type type)
-        {
+        {           
             var returnName = baseName;
             if (type.IsValueType)
             {
-                if (type.BaseType == typeof(Enum))
-                    returnName += type.BaseType.Name;
-                else
-                    returnName += type.Name;
+                returnName = baseName + "ValueType";
             }
 
             return returnName.Replace("`", "");

@@ -15,6 +15,8 @@ namespace ClientService
             _service = ClientGenerator.GenerateClass<IService>(new ServiceFinder(), new HttpClient());
             await TestTuple();
             TestBool();
+            await SendRequestHello();
+            await _service.ExecuteTask();
         }
 
         private static async Task SendRequestHello()
@@ -49,6 +51,8 @@ namespace ClientService
             var tuple = await _service.TestTuple();
             Console.WriteLine($"v1: {tuple.v1}, v2: {tuple.v2}");
             var tuple2 = _service.TestManyTuple();
+            if (tuple2 != (1, 2, 3, 4, 5, 6, 7, 8, "9"))
+                throw new Exception("Broken");
             Console.WriteLine("Enter any key to quit");
             Console.ReadLine();
         }
