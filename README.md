@@ -7,7 +7,7 @@ This RPC solution works by generating classes during runtime that implements eac
 This project has dependencies on following packages:
 * Microsoft.AspNetCore.Mvc.Abstractions version: 2.2.0
 * Microsoft.AspNetCore.Mvc.Core version: 2.2.5
-* Newtonsoft.Json version:12.0.3
+* Newtonsoft.Json version:13.0.1
 
 ## Target Framework
 The actual RPC project targets .NET Standard 2.1
